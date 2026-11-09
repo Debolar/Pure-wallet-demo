@@ -1,0 +1,10 @@
+# Build output
+target/
+
+# Secrets: never commit these
+.env
+
+# Editors
+.idea/
+*.iml
+.vscode/

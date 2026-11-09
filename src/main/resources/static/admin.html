@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Purse Admin</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <div>
+        <h1>Purse Admin</h1>
+        <p class="tagline">Back office: totals, wallets and transactions. Read-only.</p>
+      </div>
+      <a class="link" href="/">← Back to site</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card" id="lock-card">
+      <h2>Admin key</h2>
+      <p class="muted">Enter the admin key to unlock. It is kept only on this page and forgotten when you close it.</p>
+      <form id="lock-form" class="row-form">
+        <label class="grow"><span class="sr-only">Admin key</span>
+          <input type="password" id="key" placeholder="Admin key" autocomplete="off" required>
+        </label>
+        <button type="submit">Unlock</button>
+      </form>
+      <p class="error" id="lock-error" role="alert"></p>
+    </section>
+
+    <div id="admin" hidden>
+      <section class="card">
+        <div class="head-row">
+          <h2>Overview</h2>
+          <button type="button" class="ghost" id="refresh">Refresh</button>
+        </div>
+        <div class="tiles">
+          <div class="tile"><p class="muted small">Wallets</p><p class="tile-num" id="s-wallets">–</p></div>
+          <div class="tile"><p class="muted small">Transactions</p><p class="tile-num" id="s-tx">–</p></div>
+          <div class="tile"><p class="muted small">Money held</p><p class="tile-num" id="s-balance">–</p></div>
+          <div class="tile"><p class="muted small">Total deposited</p><p class="tile-num" id="s-deposits">–</p></div>
+        </div>
+        <p class="books" id="books"></p>
+      </section>
+
+      <section class="card">
+        <h2>Wallets</h2>
+        <p class="muted small">Highest balance first. Balances can't be edited here: every change must be a recorded transaction.</p>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Wallet ID</th><th>Owner</th><th>Email</th><th class="num">Balance</th><th>Opened</th></tr></thead>
+            <tbody id="wallet-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Latest transactions</h2>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Reference</th><th>Type</th><th>From</th><th>To</th><th class="num">Amount</th><th>Note</th><th>Time</th></tr></thead>
+            <tbody id="tx-rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>

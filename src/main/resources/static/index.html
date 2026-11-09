@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Purse</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <div>
+        <h1>Purse</h1>
+        <p class="tagline">A simple digital wallet. Fund it, send money, see every naira.</p>
+      </div>
+      <div class="status" id="status"><span class="dot"></span><span id="status-text">Connecting…</span></div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Signed out -->
+    <div id="signed-out" class="two">
+      <section class="card">
+        <h2>Open a wallet</h2>
+        <form id="open-form" class="stack">
+          <label><span>Full name</span><input id="o-name" required maxlength="100"></label>
+          <label><span>Email</span><input id="o-email" type="email" required maxlength="200"></label>
+          <p class="error" id="open-error" role="alert"></p>
+          <button type="submit">Open wallet</button>
+        </form>
+        <div id="new-wallet" class="notice" hidden>
+          <p><strong>Your wallet is ready.</strong> Copy both values now. The token is shown only once and works like a password.</p>
+          <p>Wallet ID: <code id="nw-id"></code></p>
+          <p>Token: <code id="nw-token" class="break"></code></p>
+          <button type="button" id="nw-continue">Continue to my wallet</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Sign in</h2>
+        <form id="signin-form" class="stack">
+          <label><span>Wallet ID</span><input id="s-id" required maxlength="16" autocomplete="off"></label>
+          <label><span>Token</span><input id="s-token" type="password" required autocomplete="off"></label>
+          <p class="muted small">Your token is kept only on this page and forgotten when you close it.</p>
+          <p class="error" id="signin-error" role="alert"></p>
+          <button type="submit">Sign in</button>
+        </form>
+      </section>
+    </div>
+
+    <!-- Signed in -->
+    <div id="signed-in" hidden>
+      <section class="card balance-card">
+        <div>
+          <p class="muted" id="w-owner"></p>
+          <p class="balance" id="w-balance">₦0.00</p>
+          <p class="muted small">Wallet ID <code id="w-id"></code></p>
+        </div>
+        <button type="button" class="ghost" id="signout">Sign out</button>
+      </section>
+
+      <div class="two">
+        <section class="card">
+          <h2>Add money</h2>
+          <p class="muted small">Demo top-up. No real payment is taken.</p>
+          <form id="deposit-form" class="stack">
+            <label><span>Amount (₦)</span><input id="d-amount" type="number" min="0.01" step="0.01" required></label>
+            <p class="error" id="deposit-error" role="alert"></p>
+            <button type="submit">Add money</button>
+          </form>
+        </section>
+
+        <section class="card">
+          <h2>Send money</h2>
+          <form id="send-form" class="stack">
+            <label><span>Recipient wallet ID</span><input id="t-to" required maxlength="16" autocomplete="off"></label>
+            <label><span>Amount (₦)</span><input id="t-amount" type="number" min="0.01" step="0.01" required></label>
+            <label><span>Note (optional)</span><input id="t-note" maxlength="140"></label>
+            <p class="error" id="send-error" role="alert"></p>
+            <p class="ok-msg" id="send-ok" role="status"></p>
+            <button type="submit" id="send-btn">Send</button>
+          </form>
+        </section>
+      </div>
+
+      <section class="card">
+        <h2>Statement</h2>
+        <ul class="lines" id="lines"></ul>
+        <p class="muted" id="lines-empty" hidden>No transactions yet.</p>
+      </section>
+    </div>
+
+    <p class="disclaimer">Demo app: all money is fictional. No bank, card or real payment is involved.</p>
+  </main>
+
+  <footer class="wrap foot">
+    <span id="version">version –</span>
+    <span><a class="link" href="admin.html">Admin</a> · <span id="env"></span></span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
