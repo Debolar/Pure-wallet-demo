@@ -1,0 +1,31 @@
+name: purse
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: purse
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: purse
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U purse -d purse"]
+      interval: 5s
+      retries: 10
+
+  app:
+    build: .
+    ports:
+      - "8081:8080"      # laptop 8081 -> container 8080 (8080 is busy on your laptop)
+    environment:
+      DATABASE_URL: jdbc:postgresql://db:5432/purse
+      DB_USER: purse
+      DB_PASSWORD: ${DB_PASSWORD}
+      ADMIN_API_KEY: ${ADMIN_API_KEY}
+      APP_ENV: compose
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:
