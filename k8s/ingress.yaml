@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: purse
+  namespace: purse
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: wallet.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: purse
+                port:
+                  number: 80
