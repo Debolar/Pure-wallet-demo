@@ -13,8 +13,7 @@ spec:
     spec:
       containers:
         - name: purse
-          image: purse-wallet-demo:local
-          imagePullPolicy: Never      # use the image on this laptop; don't download
+          image: ghcr.io/debolar/pure-wallet-demo:c409fd0bbadc2bd7f665d6b99e09fb78dce84105
           ports:
             - containerPort: 8080
           env:
