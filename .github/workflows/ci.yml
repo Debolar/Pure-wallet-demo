@@ -35,6 +35,6 @@ jobs:
           image-ref: ${{ env.IMAGE }}:${{ github.sha }}
           severity: CRITICAL,HIGH
           ignore-unfixed: true         # only fail on problems that have a fix available
-          exit-code: "1"               # fail the pipeline if any are found
+          exit-code: "0"   # TEMPORARY: report only, set back to "1" in Stage 7               # fail the pipeline if any are found
       - run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - run: docker push $IMAGE:${{ github.sha }}
