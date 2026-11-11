@@ -1,0 +1,45 @@
+# Security headers on every response
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: security-headers
+  namespace: purse
+spec:
+  headers:
+    frameDeny: true                    # no embedding in other sites (clickjacking)
+    contentTypeNosniff: true           # browsers must not guess file types
+    referrerPolicy: no-referrer        # don't leak URLs to other sites
+    contentSecurityPolicy: "default-src 'self'; frame-ancestors 'none'"
+---
+# General limit: 20 requests per second per visitor, short bursts up to 40
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: rate-limit
+  namespace: purse
+spec:
+  rateLimit:
+    average: 20
+    burst: 40
+---
+# Stricter limit for the wallet API (deposits, transfers, statements)
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: wallet-rate-limit
+  namespace: purse
+spec:
+  rateLimit:
+    average: 5
+    burst: 10
+---
+# Only allow requests from inside the machine (blocks /actuator from outside)
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: internal-only
+  namespace: purse
+spec:
+  ipAllowList:
+    sourceRange:
+      - 127.0.0.1/32
