@@ -12,7 +12,7 @@ RUN mvn -B -q package -DskipTests
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 # curl is only for the health check
-RUN apt-get update && apt-get install -y --no-install-recommends curl \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/*
 RUN useradd --create-home appuser
 COPY --from=build /build/target/purse.jar app.jar
