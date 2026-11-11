@@ -19,7 +19,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
       containers:
         - name: purse
-          image: ghcr.io/debolar/pure-wallet-demo:c409fd0bbadc2bd7f665d6b99e09fb78dce84105
+          image: ghcr.io/debolar/pure-wallet-demo:c981b7184ad98ad4f3fe8586e7980a2c63d07f1e
           ports:
             - containerPort: 8080
           env:
