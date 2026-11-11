@@ -1,8 +1,11 @@
+# 1. The website and everything else: headers + general rate limit
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: purse
   namespace: purse
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: purse-security-headers@kubernetescrd,purse-rate-limit@kubernetescrd
 spec:
   ingressClassName: traefik
   rules:
@@ -12,7 +15,42 @@ spec:
           - path: /
             pathType: Prefix
             backend:
-              service:
-                name: purse
-                port:
-                  number: 80
+              service: { name: purse, port: { number: 80 } }
+---
+# 2. The wallet API: headers + the stricter limit
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: purse-wallet-api
+  namespace: purse
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: purse-security-headers@kubernetescrd,purse-wallet-rate-limit@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: wallet.localhost
+      http:
+        paths:
+          - path: /api/wallets
+            pathType: Prefix
+            backend:
+              service: { name: purse, port: { number: 80 } }
+---
+# 3. Internal metrics and health: blocked from outside
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: purse-actuator
+  namespace: purse
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: purse-internal-only@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: wallet.localhost
+      http:
+        paths:
+          - path: /actuator
+            pathType: Prefix
+            backend:
+              service: { name: purse, port: { number: 80 } }
