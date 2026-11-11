@@ -11,6 +11,12 @@ spec:
     metadata:
       labels: { app: purse }
     spec:
+      automountServiceAccountToken: false     # no Kubernetes API key inside the Pod
+      securityContext:                        # rules for the whole Pod
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        seccompProfile: { type: RuntimeDefault }
       containers:
         - name: purse
           image: ghcr.io/debolar/pure-wallet-demo:c409fd0bbadc2bd7f665d6b99e09fb78dce84105
@@ -26,19 +32,28 @@ spec:
               valueFrom:
                 secretKeyRef: { name: admin-key, key: ADMIN_API_KEY }
             - { name: APP_ENV, value: kubernetes }
-          startupProbe:               # Java is slow to start: allow up to 150 s
+          securityContext:                    # rules for this container
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: [ALL] }
+          volumeMounts:
+            - { name: tmp, mountPath: /tmp }  # the only writable folder
+          startupProbe:
             httpGet: { path: /actuator/health/liveness, port: 8080 }
             periodSeconds: 5
             failureThreshold: 30
-          livenessProbe:              # failing -> restart the container
+          livenessProbe:
             httpGet: { path: /actuator/health/liveness, port: 8080 }
             periodSeconds: 10
-          readinessProbe:             # failing -> no traffic to this Pod
+          readinessProbe:
             httpGet: { path: /actuator/health/readiness, port: 8080 }
             periodSeconds: 5
           resources:
             requests: { cpu: 100m, memory: 384Mi }
             limits: { memory: 768Mi }
+      volumes:
+        - name: tmp
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
