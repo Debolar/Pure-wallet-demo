@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: purse
+  namespace: purse
+  labels:
+    app: purse            # the ServiceMonitor finds the Service by this label
+spec:
+  selector:
+    app: purse
+  ports:
+    - name: http          # the ServiceMonitor refers to this name
+      port: 80
+      targetPort: 8080
