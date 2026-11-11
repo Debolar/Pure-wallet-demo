@@ -20,6 +20,9 @@
 
     <properties>
         <java.version>21</java.version>
+        <!-- Security fixes (Trivy 2026-11-11): override versions managed by Spring Boot -->
+        <tomcat.version>11.0.25</tomcat.version>
+        <jackson-bom.version>3.1.7</jackson-bom.version>
     </properties>
 
     <dependencies>
